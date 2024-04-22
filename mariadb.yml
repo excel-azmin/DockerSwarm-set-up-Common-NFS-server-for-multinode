@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  db:
+    image: mariadb:10.6
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--password=${DB_PASSWORD}"]
+      interval: 1s
+      retries: 15
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+      - --skip-innodb-read-only-compressed
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:?No db password set}
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - mariadb-network
+
+volumes:
+  db-data:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.12.105,nolock,soft,rw"
+      device: ":/var/nfs/docker/mariadb"
+
+networks:
+  mariadb-network:
+    name: mariadb-network
+    attachable: true
