@@ -228,28 +228,22 @@ sudo exportfs -ra
 * Allow port for `worker2`
 
 ```
-sudo ufw allow 2049/tcp
-sudo ufw allow 2049/udp
-sudo ufw allow 111/tcp
-sudo ufw allow 111/udp
-sudo ufw allow 1110/tcp
-sudo ufw allow 1110/udp
-sudo ufw allow 20048/tcp
-sudo ufw allow 20048/udp
+# Allow specific ports
+sudo ufw allow 2377/tcp
+sudo ufw allow 7946/tcp
+sudo ufw allow 7946/udp
+sudo ufw allow 4789/udp
 sudo ufw reload
 ```
 
 * Allow port `manager` and `worker1`
 
 ```
-sudo ufw allow out 2049/tcp
-sudo ufw allow out 2049/udp
-sudo ufw allow out 111/tcp
-sudo ufw allow out 111/udp
-sudo ufw allow out 1110/tcp
-sudo ufw allow out 1110/udp
-sudo ufw allow out 20048/tcp
-sudo ufw allow out 20048/udp
+# Allow specific ports
+sudo ufw allow 2377/tcp
+sudo ufw allow 7946/tcp
+sudo ufw allow 7946/udp
+sudo ufw allow 4789/udp
 sudo ufw reload
 ```
 
