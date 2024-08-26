@@ -144,6 +144,53 @@ docker stack deploy -c portainer.yml portainer
 docker stack ps portainer
 ```
 
+# Local Environment 
+
+```
+version: '3.3'
+
+services:
+  agent:
+    image: portainer/agent:2.11.1
+    environment:
+      AGENT_CLUSTER_ADDR: tasks.agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - agent-network
+    ports:
+      - "9001:9001"
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.platform.os == linux
+
+  portainer:
+    image: portainer/portainer-ce:2.11.1
+    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    volumes:
+      - portainer-data:/data
+    networks:
+      - agent-network
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.portainer.portainer-data == true
+networks:
+  agent-network:
+    attachable: true
+
+volumes:
+  portainer-data:
+
+```
+
 
 # Starting the docker swarm installation for worker1, worker2
 
